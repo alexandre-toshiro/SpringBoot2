@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,11 +45,9 @@ public class TopicosController {
 	
 	@GetMapping
 	public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso, 
-			@RequestParam int pagina, @RequestParam int qtd, @RequestParam String ordenacao) {
-		
-		//Acrescentando ordem a paginacao
-		Pageable paginacao = PageRequest.of(pagina, qtd, Direction.DESC, ordenacao); //faz a paginação
-		
+			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10)Pageable paginacao ) {
+		//Informa a paginação padrão, caso n seja passado parametros de ordenação.
+				
 		//trocar o todos os tipo de LIst para Page.
 		if (nomeCurso == null) {
 			Page<Topico> topicos = topicoRepository.findAll(paginacao);
