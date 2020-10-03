@@ -21,8 +21,12 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	//Config de autorização (acesso a URLs, quem pode acessar)
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/topicos").permitAll()
-		.antMatchers(HttpMethod.GET, "/topicos/*").permitAll();
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/topicos").permitAll() 
+		//permite os métodos GET da url /topicos
+		.antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
+		//permite métodos get da url /topico/algumaCoisa
+		.anyRequest().authenticated() // qualquer outra req, precisa estar autenticado
+		.and().formLogin();
 	}
 
 	//Config de recursos estatiscos(js, css, imagens, etc.)
