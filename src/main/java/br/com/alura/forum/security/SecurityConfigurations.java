@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity // Habilita o security
@@ -30,8 +31,11 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 		//permite os métodos GET da url /topicos
 		.antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
 		//permite métodos get da url /topico/algumaCoisa
+		.antMatchers(HttpMethod.POST, "/auth").permitAll()
 		.anyRequest().authenticated() // qualquer outra req, precisa estar autenticado
-		.and().formLogin();
+		.and().csrf().disable()//csrf ataque a aplicações web desabilitado, resolvemos com jwt.]
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		//indica que usará stateless
 	}
 
 	//Config de recursos estatiscos(js, css, imagens, etc.)
