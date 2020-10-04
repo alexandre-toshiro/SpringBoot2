@@ -10,13 +10,22 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 public class AutenticacaoViaTokenFilter extends OncePerRequestFilter{
+	
+	private TokenService tokenService;//essa classe não recebe injeção de dependencia.
+	
+	public AutenticacaoViaTokenFilter(TokenService tokenService) {
+		//então obrigamos que seja passado pelo construtor.
+		this.tokenService = tokenService;
+	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		
 		String token = recuperarToken(request);// no request conseguimos recuperar o token
-		System.out.println(token);
+		boolean valido = tokenService.isTokenValido(token);
+		System.out.println(valido);
+		
 		filterChain.doFilter(request, response);
 		
 	}

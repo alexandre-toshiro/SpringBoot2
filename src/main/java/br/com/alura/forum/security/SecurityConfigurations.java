@@ -20,6 +20,9 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AutenticacaoService autenticacaoService;
+	
+	@Autowired
+	private TokenService tokenService;
 
 	@Override
 	@Bean
@@ -47,7 +50,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 				.and().csrf().disable()// csrf ataque a aplicações web desabilitado, resolvemos com jwt.
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		// indica que usará stateless
-				.and().addFilterBefore(new AutenticacaoViaTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+				.and().addFilterBefore(new AutenticacaoViaTokenFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
 				//Ordem de execução dos filtros, 1º o criado, 2º Filtro interno do spring.
 	}
 
