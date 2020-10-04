@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.alura.forum.controller.dto.TokenDto;
 import br.com.alura.forum.controller.form.LoginForm;
 import br.com.alura.forum.security.TokenService;
 
@@ -28,14 +29,14 @@ public class AutenticacaoController {
 	private TokenService tokenService;
 
 	@PostMapping
-	public ResponseEntity<?> autenticar(@RequestBody @Valid LoginForm form) {
+	public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginForm form) {
 		UsernamePasswordAuthenticationToken dadosLogin = form.converter();
 
 		try {
 			Authentication authentication = authManager.authenticate(dadosLogin);
 			String token = tokenService.gerarToken(authentication);
-			System.out.println(token);
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok(new TokenDto(token,"Bearer"));
+			//apagar o build, pois no ok, já estamos passando oq é devolvido no corpo da resposta, assim já será montado o objeto.
 
 		} catch (AuthenticationException e) {
 			return ResponseEntity.badRequest().build();
