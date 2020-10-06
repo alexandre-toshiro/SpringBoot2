@@ -49,9 +49,9 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 				// permite os métodos GET da url /topicos
 				.antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
 				// permite métodos get da url /topico/algumaCoisa
-				.antMatchers(HttpMethod.POST, "/auth").permitAll().anyRequest().authenticated() // qualquer outra req,
-																								// precisa estar
-																								// autenticado
+				.antMatchers(HttpMethod.POST, "/auth").permitAll()
+				.antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+				.anyRequest().authenticated() 																								
 				.and().csrf().disable()// csrf ataque a aplicações web desabilitado, resolvemos com jwt.
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		// indica que usará stateless
