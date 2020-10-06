@@ -14,6 +14,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import br.com.alura.forum.repository.UsuarioRepository;
+
 @EnableWebSecurity // Habilita o security
 @Configuration // Diz que é de configuração
 public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
@@ -23,6 +25,9 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private TokenService tokenService;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
 	@Override
 	@Bean
@@ -50,7 +55,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 				.and().csrf().disable()// csrf ataque a aplicações web desabilitado, resolvemos com jwt.
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		// indica que usará stateless
-				.and().addFilterBefore(new AutenticacaoViaTokenFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
+				.and().addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, usuarioRepository), UsernamePasswordAuthenticationFilter.class);
 				//Ordem de execução dos filtros, 1º o criado, 2º Filtro interno do spring.
 	}
 
